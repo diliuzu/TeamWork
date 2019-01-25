@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.web.admin.dao.TbItemDao">
+    <select id="selectAll" resultType="">
+        SELECT
+        a.id,
+        a.title,
+        a.sellPoint,
+        a.price,
+        a.num,
+        a.barcode,
+        a.image,
+        a.cid,
+        a.status,
+        a.created,
+        a.updated;
+        FROM
+        tb_item AS a
+    </select>
+
+
+
+</mapper>
