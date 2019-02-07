@@ -77,7 +77,11 @@ public class MapperUtils {
     }
 
 
-
+    public static <T> Map<String, T> json2mapByTree(String jsonString, String tree, Class<T> clazz) throws Exception {
+        JsonNode jsonNode=objectMapper.readTree(jsonString);
+        JsonNode data=jsonNode.findPath(tree);
+        return MapperUtils.json2map(data.toString(),clazz);
+    }
     /**
      * 字符串转换为 Map<String, Object>
      *

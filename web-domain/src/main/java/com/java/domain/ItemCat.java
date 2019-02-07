@@ -15,7 +15,6 @@ public class ItemCat implements Serializable {
     private int status;
     @NotNull
     private Integer sortOrder;
-
     private Boolean isParent;
     private Date created;
     private Date updated;

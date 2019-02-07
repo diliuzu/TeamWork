@@ -1,6 +1,7 @@
 package com.java.commons.util;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -9,20 +10,25 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * HttpClient工具类
  */
 public class HttpClientUtils {
-
+    public static final String URL="http://localhost:8080";
     private static final String REQUEST_METHOD_GET = "GET";
     private static final String REQUEST_METHOD_POST = "POST";
     private static final String REQUEST_HEADER_CONNECTION="keep-alive";
     private static final String REQUEST_HEADER_USER_AGENT="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36";
-
+    private static CloseableHttpClient httpClient;
+    public static final String CHARSET = "UTF-8";
 
     /**
      *  Get请求
@@ -33,6 +39,41 @@ public class HttpClientUtils {
         String result = HttpClientUtils.getResult("GET", url, null);
         return result;
     }
+
+
+    public static String sendGet(String url, Map<String, Object> params) {
+        if(!StringUtils.hasText(url)){
+            return "";
+        }
+        try {
+            if (params != null && !params.isEmpty()) {
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
+                for (String key : params.keySet()) {
+                    pairs.add(new BasicNameValuePair(key, params.get(key).toString()));
+                }
+                url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairs, CHARSET));
+            }
+            HttpGet httpGet = new HttpGet(url);
+            CloseableHttpResponse response = httpClient.execute(httpGet);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != 200) {
+                httpGet.abort();
+                throw new RuntimeException("HttpClient,error status code :" + statusCode);
+            }
+            HttpEntity entity = response.getEntity();
+            String result = null;
+            if (entity != null) {
+                result = EntityUtils.toString(entity, "utf-8");
+            }
+            EntityUtils.consume(entity);
+            response.close();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     /**
      * GET请求
