@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.web.admin.dao.TbItemDao">
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM  tb_item AS a
+
+    </select>
+
+
+    <select id="selectAll" resultType="TbItem" parameterType="java.util.Map">
+        SELECT
+        a.id,
+        a.title,
+        a.sellPoint,
+        a.price,
+        a.num,
+        a.barcode,
+        a.image,
+        a.cid,
+        a.status,
+        a.created,
+        a.updated,
+        b.id AS "parent.id",
+        b.name AS "parent.name",
+        b.isParent AS "parent.isParent"
+        FROM
+        tb_item AS a LEFT JOIN tb_item_cat AS b ON a.cid = b.id
+        LIMIT #{start},#{length}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO tb_item(
+        title,
+        sellPoint,
+        price,
+        num,
+        barcode,
+        image,
+        cid,
+        status,
+        created,
+        updated
+        )
+        VALUES (
+        #{title},
+        #{sellPoint},
+        #{price},
+        #{num},
+        #{barcode},
+        #{image},
+        #{parent.id},
+        #{status},
+        #{created},
+        #{updated}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE tb_item
+        SET
+        title = #{title},
+        sellPoint = #{sellPoint},
+        price = #{price},
+        num = #{num},
+        barcode = #{barcode},
+        image = #{image},
+        cid = #{parent.id},
+        status = #{status},
+        created = #{created},
+        updated= #{updated}
+        WHERE id = #{id}
+    </update>
+
+
+    <delete id="deleteById">
+        delete FROM
+        tb_item
+        WHERE id=#{id}
+    </delete>
+
+    <select id="selectById" resultType="TbItem">
+        SELECT
+        a.id,
+        a.title,
+        a.sellPoint,
+        a.price,
+        a.num,
+        a.barcode,
+        a.image,
+        a.cid,
+        a.status,
+        a.created,
+        a.updated,
+        b.id AS "parent.id",
+        b.name AS "parent.name",
+        b.isParent AS "parent.isParent"
+        FROM
+        tb_item AS a LEFT JOIN tb_item_cat AS b ON a.cid = b.id
+        WHERE a.id=#{id}
+    </select>
+
+</mapper>
