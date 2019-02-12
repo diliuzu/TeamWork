@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.web.admin.dao.TbOrderDao">
+
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM  tb_order AS a
+
+    </select>
+
+
+    <select id="selectAll" resultType="TbOrder" parameterType="java.util.Map">
+        SELECT
+        a.order_id AS  orderId,
+        a.payment,
+        a.payment_type AS paymentType,
+        a.post_fee AS postFee,
+        a.status,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.payment_time AS paymentTime,
+        a.consign_time AS consignTime,
+        a.end_time AS engTime,
+        a.close_time AS closeTime,
+        a.shipping_name AS shoppingName,
+        a.shipping_code AS shippingCode,
+        a.user_id AS userId,
+        a.buyer_message AS buyMessage,
+        a.buyer_nick AS buyNick,
+        a.buyer_rate AS buyerRate
+        FROM
+        tb_order AS a
+        LIMIT #{start},#{length}
+    </select>
+
+
+    <update id="update">
+        UPDATE tb_order
+        SET
+        status =#{status},
+        update_time= #{updateTime}
+        WHERE order_id=#{orderId}
+    </update>
+
+
+    <select id="selectById" resultType="TbOrder">
+        SELECT
+        a.order_id AS orderId,
+        a.payment,
+        a.payment_type AS paymentType,
+        a.post_fee AS postFee,
+        a.status,
+        a.create_time AS createTime,
+        a.update_time AS updateTime,
+        a.payment_time AS paymentTime,
+        a.consign_time AS consignTime,
+        a.end_time AS engTime,
+        a.close_time AS closeTime,
+        a.shipping_name AS shoppingName,
+        a.shipping_code AS shippingCode,
+        a.user_id AS userId,
+        a.buyer_message AS buyMessage,
+        a.buyer_nick AS buyNick,
+        a.buyer_rate AS buyerRate
+        FROM
+        tb_order AS a
+        WHERE a.order_id=#{orderId}
+    </select>
+
+</mapper>

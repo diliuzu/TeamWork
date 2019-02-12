@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.web.admin.dao.TbItemCatDao">
+    <sql id="selects">
+            a.id,
+            a.name,
+            a.status,
+            a.sortOrder,
+            a.isParent,
+            a.created,
+            a.updated,
+            IFNULL(b.id,"0") AS "parent.id",
+            IFNULL(b.name,"/") AS "parent.name"
+    </sql>
+
+    <sql id="tbItemCatJoins">
+        LEFT JOIN tb_item_cat as b ON a.parentId = b.id
+    </sql>
+
+    <select id="selectAll" resultType="TbItemCat">
+        SELECT
+        <include refid="selects"/>
+        FROM
+        tb_item_cat as a
+        <include refid="tbItemCatJoins"/>
+        ORDER BY a.sortOrder ASC
+    </select>
+
+    <select id="getItemCatByParentId" resultType="TbItemCat">
+        SELECT
+        <include refid="selects"/>
+        FROM
+        tb_item_cat as a
+        <include refid="tbItemCatJoins"/>
+        WHERE
+        a.parentId = #{id}
+    </select>
+
+    <select id="selectById" resultType="TbItemCat">
+        SELECT
+        <include refid="selects"/>
+        FROM
+        tb_item_cat as a
+        <include refid="tbItemCatJoins"/>
+        WHERE
+        a.id = #{id}
+    </select>
+
+    <insert id="Insert" >
+        INSERT INTO tb_item_cat
+        (
+          parentId,
+          name,
+          status,
+          sortOrder,
+          isParent,
+          created,
+          updated
+        )
+        VALUES
+        (
+          #{parent.id},
+          #{name},
+          #{status},
+          #{sortOrder},
+          #{isParent},
+          #{created},
+          #{updated}
+        )
+    </insert>
+
+    <update id="Update">
+        UPDATE tb_item_cat
+        SET
+        parentId=#{parent.id},
+        name = #{name},
+        status=#{status},
+        sortOrder=#{sortOrder},
+        isParent=#{isParent},
+        created=#{created},
+        updated=#{updated}
+        WHERE
+        id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE a,b
+        FROM tb_item_cat AS a LEFT JOIN tb_item_cat AS b
+        ON a.id = b.parentId
+        WHERE a.id=#{id}
+    </delete>
+
+</mapper>
