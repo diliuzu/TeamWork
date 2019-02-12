@@ -1,0 +1,130 @@
+//
+// List groups
+// --------------------------------------------------
+
+
+// Base class
+//
+// Easily usable on <ul>, <ol>, or <div>.
+
+.list-group {
+  // No need to set list-style: none; since .list-group-tbItem is block level
+  margin-bottom: 20px;
+  padding-left: 0; // reset padding because ul and ol
+}
+
+
+// Individual list tbItems
+//
+// Use on `li`s or `div`s within the `.list-group` parent.
+
+.list-group-tbItem {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  // Place the border on the list tbItems and negative margin up for better styling
+  margin-bottom: -1px;
+  background-color: @list-group-bg;
+  border: 1px solid @list-group-border;
+
+  // Round the first and last tbItems
+  &:first-child {
+    .border-top-radius(@list-group-border-radius);
+  }
+  &:last-child {
+    margin-bottom: 0;
+    .border-bottom-radius(@list-group-border-radius);
+  }
+}
+
+
+// Interactive list tbItems
+//
+// Use anchor or button elements instead of `li`s or `div`s to create interactive tbItems.
+// Includes an extra `.active` modifier class for showing selected tbItems.
+
+a.list-group-tbItem,
+button.list-group-tbItem {
+  color: @list-group-link-color;
+
+  .list-group-tbItem-heading {
+    color: @list-group-link-heading-color;
+  }
+
+  // Hover state
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: @list-group-link-hover-color;
+    background-color: @list-group-hover-bg;
+  }
+}
+
+button.list-group-tbItem {
+  width: 100%;
+  text-align: left;
+}
+
+.list-group-tbItem {
+  // Disabled state
+  &.disabled,
+  &.disabled:hover,
+  &.disabled:focus {
+    background-color: @list-group-disabled-bg;
+    color: @list-group-disabled-color;
+    cursor: @cursor-disabled;
+
+    // Force color to inherit for custom content
+    .list-group-tbItem-heading {
+      color: inherit;
+    }
+    .list-group-tbItem-text {
+      color: @list-group-disabled-text-color;
+    }
+  }
+
+  // Active class on tbItem itself, not parent
+  &.active,
+  &.active:hover,
+  &.active:focus {
+    z-index: 2; // Place active tbItems above their siblings for proper border styling
+    color: @list-group-active-color;
+    background-color: @list-group-active-bg;
+    border-color: @list-group-active-border;
+
+    // Force color to inherit for custom content
+    .list-group-tbItem-heading,
+    .list-group-tbItem-heading > small,
+    .list-group-tbItem-heading > .small {
+      color: inherit;
+    }
+    .list-group-tbItem-text {
+      color: @list-group-active-text-color;
+    }
+  }
+}
+
+
+// Contextual variants
+//
+// Add modifier classes to change text and background color on individual tbItems.
+// Organizationally, this must come after the `:hover` states.
+
+.list-group-tbItem-variant(success; @state-success-bg; @state-success-text);
+.list-group-tbItem-variant(info; @state-info-bg; @state-info-text);
+.list-group-tbItem-variant(warning; @state-warning-bg; @state-warning-text);
+.list-group-tbItem-variant(danger; @state-danger-bg; @state-danger-text);
+
+
+// Custom content options
+//
+// Extra classes for creating well-formatted content within `.list-group-tbItem`s.
+
+.list-group-tbItem-heading {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.list-group-tbItem-text {
+  margin-bottom: 0;
+  line-height: 1.3;
+}
